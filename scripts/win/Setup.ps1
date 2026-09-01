@@ -216,6 +216,7 @@ function Set-RestorePoint {
     Assert-IsAdmin
 
     try {
+        Enable-ComputerRestore -Drive "C:\"
         Checkpoint-Computer -Description "Koning Kevin Setup" -RestorePointType "MODIFY_SETTINGS"
         Write-Output "Restore point created successfully"
     }
