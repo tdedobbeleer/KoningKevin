@@ -10,6 +10,20 @@
     - Add kk-localadmin to SpecialAccounts\Userlist
     - Install Google Chrome
     - Install Google Drive for desktop
+
+    A Windows restore point is created before any changes are made.
+.PARAMETER GCP
+    Install and configure Google Credential Provider for Windows.
+.PARAMETER WinRm
+    Enable Windows Remote Management.
+.PARAMETER LocalAdmin
+    Add kk-localadmin to SpecialAccounts\Userlist.
+.PARAMETER Chrome
+    Install Google Chrome.
+.PARAMETER Drive
+    Install Google Drive for desktop.
+.PARAMETER Help
+    Show this help message.
 .EXAMPLE
     .\Setup.ps1
 
@@ -198,10 +212,24 @@ function Install-GoogleDrive() {
     }
 }
 
+function Set-RestorePoint {
+    Assert-IsAdmin
+
+    try {
+        Checkpoint-Computer -Description "Koning Kevin Setup" -RestorePointType "MODIFY_SETTINGS"
+        Write-Output "Restore point created successfully"
+    }
+    catch {
+        Write-Output "Could not create restore point: $($_.Exception.Message)"
+    }
+}
+
 if ($Help) {
     Show-Help
     exit 0
 }
+
+Set-RestorePoint
 
 $runAll = -not ($GCP -or $WinRm -or $LocalAdmin -or $Chrome -or $Drive)
 
